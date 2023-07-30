@@ -74,4 +74,58 @@ Problems:
 2. In most cases smart contract will require users to prove some arbitrary constraint on encrypted private value. To make it easier for developer the circuit for proof of encryption must be modular such that developers can bind it with their existing circuit and simply add hash of ciphertext as an additional public input. Exact way to achieving this is still unclear. 
 
 References: 
-1. 
+
+
+------
+
+Select and Count
+
+I have yet to figure out how to convert this to threshold
+
+------
+
+**Lass than function** 
+
+**Univariate Less than**
+
+$$LT(X,Y) = \frac{p+1}{2}(X-Y)^{p-1} + \sum_{i=1,odd}^{p-2} \alpha_i (X - Y)^i$$
+where $\alpha_i$ is the $i_th$ coefficient of polynomial with degree $p-2$.
+$$\alpha_i = \sum_{a = 1}^{\frac{p-1}{2}} a^{p - 1 - i}$$
+Let $Z = X- Y$.
+Notice that we can re-write
+$$
+\sum_{i=1,odd}^{p-2} \alpha_i (Z)^i
+$$
+using even powers as
+$$
+Z\sum_{i=0,even}^{p-3} \alpha_{i+1} (Z)^i
+$$
+Thus we collapse summation into a polynomial g(X) with X = Z^2 and of degree $=\frac{p-3}{2}$.
+$$
+g(X) = \sum_{i=0}^{\frac{p-3}{2}} \alpha_{(i\cdot 2)+1}X^i
+$$
+Thus we can re-write $LT$ as 
+$$
+LT(X,Y) = \frac{p+1}{2}Z^{p-1} + Zg(Z^2)
+$$
+
+We evaluate $g(Z^2)$ using Paterson-Stockmeyer to reduce non-scalar multiplications 
+
+Few points to note: 
+1. Univariate less than restricts the input range to $[-\frac{p-1}{2}, \frac{p-1}{2}]$
+2. Since $Z = X - Y$ univariate $LT$ is equal to sign check function $IsNeg(X)$ that returns 1 if X < 0, otherwise 0. 
+
+
+**Bivariate Less than**
+
+
+
+---
+
+Arbitrary function evqluation
+
+------
+
+Implement Sorting 
+
+Developer can select the index to decrypt

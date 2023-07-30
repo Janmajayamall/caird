@@ -1,0 +1,11 @@
+[package]
+name = "operators"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bfv = {path = "./../../bfv/bfv"}
+byteorder = "1.4.3"
+rand = "0.8.5"
