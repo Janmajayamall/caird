@@ -30,3 +30,18 @@ pub fn decrypt_and_print(evaluator: &Evaluator, ct: &Ciphertext, sk: &SecretKey,
     let m = evaluator.plaintext_decode(&evaluator.decrypt(sk, ct), Encoding::default());
     println!("{tag} m: {:?}", m);
 }
+
+pub fn convert_u64_to_i64(values: &[u64], modq: u64) -> Vec<i64> {
+    let q_by_2 = modq / 2;
+
+    values
+        .iter()
+        .map(|v| {
+            if *v < q_by_2 {
+                *v as i64
+            } else {
+                -1 * (modq - *v) as i64
+            }
+        })
+        .collect()
+}
