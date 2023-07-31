@@ -80,13 +80,21 @@ References:
 
 Select and Count
 
-I have yet to figure out how to convert this to threshold
+TODO - treshold
 
 ------
 
-**Lass than function** 
+**Less than function** 
 
 **Univariate Less than**
+
+**User input**
+TODO
+
+**Output**
+TODO
+
+**Implementation**
 
 $$LT(X,Y) = \frac{p+1}{2}(X-Y)^{p-1} + \sum_{i=1,odd}^{p-2} \alpha_i (X - Y)^i$$
 where $\alpha_i$ is the $i_th$ coefficient of polynomial with degree $p-2$.
@@ -117,15 +125,63 @@ Few points to note:
 
 
 **Bivariate Less than**
+TODO
+
+--------
+**Sort**
+
+**User Input**
+TODO
+
+**Input**
+TODO
+
+**Implementation**
+
+Sorting uses less than as a sub routine. The basic idea is to use less than to construct comparison matrix $L$ for array $v$  such as: 
+
+$$
+L_{i,j} = \left\{
+\begin{array}{ll}
+1 & \mbox{if v[i] < v[j]},\\
+0 & \mbox{otherwise},\\
+\end{array}
+\right.
+$$
+
+For ex, if $v = [1,2,3,4,5]$, then
+$$
+L =
+\begin{bmatrix} 
+	0 & 1 & 1 & 1 & 1 \\
+	0 & 0 & 1 & 1 & 1 \\
+	0 & 0 & 0 & 1 & 1 \\
+	0 & 0 & 0 & 0 & 1 \\
+	0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix} 
+$$
+Notice that hamming weight (hw) of row corresponding to max value, ie 5, is 0 and hw of row corresponding to 4 is 1, and the pattern continues. In general, hamming weight of each row in $L$ will indicate corresponding value's position in descending ordered array. Thus, if original array is stored in descending order then the value at $i^{th}$ index will have hamming weight $i$ in $L$.
+
+To sort array of ciphertexts $v = [ct_0,...,ct_n]$ we first calculate $L_j$, that is hamming weight of row corresponding to $ct_j$ in $L$. Notice that this results in $n$ ciphertexts as $[L_0, ... L_n]$. Now let $v'$ equal $v$ sorted in descending order. Then to get $i^{th}$ element of $v'$ we calculate: 
+$$
+v'_i = \sum_{j=0}^{n-1} EQ(i, L_j) \cdot ct_j
+$$
+where 
+$$
+EQ(i,L_j) = 1 - (i - L_j)^{p-1}
+$$
+$EQ$ can be simplified further so that cost of exponentiating $L_j$ can be amortised over different values of $i$ (only helpful if $EQ$ is called for multiple $i$ values). We can re-write $EQ$ as
+$$
+EQ(i,L_j) = 1 - \sum_{k=0}^{p-1}  i^k L_j^{p-1-k}
+$$
+Notice that $EQ(i, L_j)$ returns 1 if $i == L_j$ that is when hamming weight of $ct_j$ in $L == i$, 0 otherwise. Since hamming weight is unique , by multiplying $EQ(i, L_j)$ by $ct_j$ for each $j \in [0, n-1]$ and summing the products we obtain $i^{th}$ value.
 
 
 
 ---
 
-Arbitrary function evqluation
+**Arbitrary function evaluation**
+
+TODO
 
 ------
-
-Implement Sorting 
-
-Developer can select the index to decrypt
