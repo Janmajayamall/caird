@@ -10,9 +10,9 @@ fn threshold_decrypt(ciphertexts: []) -> plaintexts
 
 The decryption procedure in real life scenario should only work if $t$ out $n$ nodes are in consensus, but we will assume for now that they always are. Whenever we refer to $C$ as signing the output we are assuming that $t$ out $n$ nodes in $C_n$ are in consensus and sign the output. Whenever $C$ returns output and corresponding signature, we assume that a random leader $C_l$ is selected from $C_n$ and all nodes in consensus send their signature to $C_l$. $C_l$ collects all signature and packs signature and output into a data blob and posts it on-chain to the calling smart contract. 
 
-We will use a signature aggegration scheme to aggregate signature into a single signautre for posting on-chain, but details of the scheme are irrelevant for this document. 
+We will use a signature aggregation scheme to aggregate signature into a single signature for posting on-chain, but details of the scheme are irrelevant for this document. 
 
-We don't discuss the failure case when less than t out of n nodes are in consensus. The behaviour is still undecided. 
+We don't discuss the failure case when less than $t$ out of $n$ nodes are in consensus. The behaviour is still undecided. 
 
 
 **IsUnique**
@@ -71,7 +71,6 @@ $C$ signs `output` as $sig$ and returns ($sig$, `output`)
 Problems: 
 1. Expand the API to support encrypting different data sizes in ciphertext.
 	1. One suggestion is  to have variations of `isUnique` that support different data sizes.
-2. In most cases smart contract will require users to prove some arbitrary constraint on encrypted private value. To make it easier for developer the circuit for proof of encryption must be modular such that developers can bind it with their existing circuit and simply add hash of ciphertext as an additional public input. Exact way to achieving this is still unclear. 
 
 References: 
 
@@ -80,7 +79,7 @@ References:
 
 Select and Count
 
-TODO - treshold
+TODO - threshold
 
 ------
 
@@ -130,11 +129,14 @@ TODO
 --------
 **Sort**
 
-**User Input**
-TODO
+Sorts received ciphertexts set $ct = \{ct_0, ct_1, ..., ct_n\}$ of size $n$ and returns only necessary values. 
 
-**Input**
-TODO
+**User Input**
+User encrypts its value under $pk$ to produce $ct_i$. User should also, in addition to other proofs required, produce a proof of correct encryption of $ct_i$ with public input set as $h_{cti} = Hash(ct_i)$. User must send proof $\pi_i$ and $h_{cti}$ to smart contract. User must send $ct_i$ to $C$.
+
+**API arguments**
+1. hamming_weight: If set to true then decrypts hamming weight of each ciphertext and returns them. For example, hamming weight of ciphertext with maximum value will be 0 and hamming weight of ciphertext with minimum value will be $n-1$
+2. sort_index: By default an array with sorted values is returned. You can restrict to only reveal and return value at sort_index.
 
 **Implementation**
 
@@ -176,7 +178,9 @@ EQ(i,L_j) = 1 - \sum_{k=0}^{p-1}  i^k L_j^{p-1-k}
 $$
 Notice that $EQ(i, L_j)$ returns 1 if $i == L_j$ that is when hamming weight of $ct_j$ in $L == i$, 0 otherwise. Since hamming weight is unique , by multiplying $EQ(i, L_j)$ by $ct_j$ for each $j \in [0, n-1]$ and summing the products we obtain $i^{th}$ value.
 
+In case hamming_weight is set true, threshold_decrypt $[L0, ...L_n]$ to produce hamming_weight array and return. 
 
+If sort_index is set to $i$ then only extract $i^{th}$ element of $v'$ and return. Otherwise, extract all values of $v'$ and return. 
 
 ---
 
