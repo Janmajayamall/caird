@@ -1,4 +1,4 @@
-Lifecycle of API call
+# Lifecycle of API call
 
 To illustrate the life cycle of API, let's consider the following example. To ease reasoning we will think of threshold FHE network as a single FHE enabled node $C$. We will additionally assume that $C$ has made public its public key $pk$ using which anyone can encrypt message $m$ to $C$ under a given FHE scheme.
 

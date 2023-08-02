@@ -136,8 +136,8 @@ Sorting uses less than as a sub routine. The basic idea is to use less than to c
 
 $$L_{i,j} = \left\{
 \begin{array}{ll}
-1 & \mbox{if v[i] < v[j]},\\
-0 & \mbox{otherwise},\\
+1 & \text{if v[i] < v[j]},\\
+0 & \text{otherwise},\\
 \end{array}
 \right.$$
 

@@ -1,6 +1,8 @@
+# Example use-cases
+
 Below are few use-cases describing how can you use FHE API calls to implement things in smart contracts that simply were not possible before. 
 
-**Auctions**
+## Auctions
 Auctions without leaking strategies are pretty hard to achieve on-chain. So let's see how can we build on-chain auctions using FHE APIs. 
 
 Auctions on transparent chains like are Ethereum are somewhat limited by the fact that value transfers aren't private. Key issue is how do you make sure that bidder has enough balance to pay the bid upon winning. To get around this we have two options. (1) Ask users to commit to a maximum value to participate in auction and their bids cannot be more than the maximum value. (2) Use methods as implemented in [this](https://a16zcrypto.com/posts/article/hidden-in-plain-sight-a-sneaky-solidity-implementation-of-a-sealed-bid-auction/) and [this](https://ethglobal.com/showcase/anonymous-vickrey-auctions-on-chain-igh5e) using create2 to obscure bid commitments. For ease, I will use (1) but you can easily swap out (1) for (2).
@@ -15,13 +17,13 @@ Notice that only the rank of each user in the auction and the second highest bid
 
 With some modifications it is possible to only reveal identity of the user with highest bid (hint: requires an additional equality operation) without revealing the rank of each user. But explaining this is left as task for later. 
 
-**Encrypted Votes**
+## Encrypted Votes
 
-In [[API]] we discussed how to have encrypted identities and prevent double votes. We can simply extend that to require encrypted votes as well. 
+In [API](./API) we discussed how to have encrypted identities and prevent double votes. We can simply extend that to require encrypted votes as well. 
 
 Each voter, in addition to encrypting $h = Hash(id)$, also encrypts their vote under $pk$ to produce $ct_{vi}$. Proof $\pi_i$ now also requires proof of correct encryption of $ct_{vi}$ and $h_{vi} = Hash(ct_vi)$ as a public input. User sends $\pi_i, h_{cti}, h_{vi}$ to $v_c$ and ct_{i},ct_{vi} to $C$.
 
 Once voting period ends, $C$ first processes $ct_{i}$ as before to produce `values` array indicating whether $ct_i$ corresponds to an unique identity. $C$, instead of sending `values` directly to $v_c$ as before, uses it to tally votes. $C$ only adds $ct_{vi}$ corresponding to indices that have bit as 1 in `values` to produce $ct_{final}$. $C$ threshold decrypts $ct_{final}$, signs it, and sends vote tally to $v_c$. $v_c$ verifies the signature, accepts vote tally, and ends the voting round. 
 
-**Simple Multi player game with encrypted shared state**
+## Simple Multi player game with encrypted shared state
 TODO
