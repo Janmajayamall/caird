@@ -346,7 +346,7 @@ mod tests {
     fn less_than_works() {
         let mut rng = thread_rng();
 
-        let mut params = BfvParameters::new(&[60; 10], 65537, 1 << 3);
+        let mut params = BfvParameters::new(&[60; 10], 65537, 1 << 4);
         params.enable_hybrid_key_switching(&[60; 3]);
 
         let modt_by_2 = Modulus::new(params.plaintext_modulus / 2);
@@ -378,7 +378,7 @@ mod tests {
     fn sort_univariate_works() {
         let mut rng = thread_rng();
 
-        let mut params = BfvParameters::new(&[60; 15], 65537, 1 << 3);
+        let mut params = BfvParameters::new(&[60; 15], 65537, 1 << 4);
         params.enable_hybrid_key_switching(&[60; 3]);
 
         let sk = SecretKey::random_with_params(&params, &mut rng);
